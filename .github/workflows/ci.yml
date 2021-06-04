@@ -29,11 +29,5 @@ jobs:
       - name: Linting
         run: yarn lint --fix
 
-      - name: Test
-        run: yarn test
-
-      - name: Test Snapshot
-        run: yarn test -u
-
       - name: Build
         run: yarn build
