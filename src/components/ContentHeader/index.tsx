@@ -4,6 +4,7 @@ import { Container, Typography, Box, Select, MenuItem } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { useRateTable } from 'store/useRateTable'
 import { useSolicitation } from 'store/useSolicitation'
+import { motion } from 'framer-motion'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -76,50 +77,77 @@ const ContentHeader = ({ tabled }: ContentHeaderProps) => {
   const tables = getGenerateTableOptions(desiredValue)
 
   return (
-    <Container
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
+    <motion.div
+      className="animateHeader"
+      transition={{ duration: 0.5, delay: 0.2 }}
+      variants={{
+        show: { opacity: 1 },
+        hidden: { opacity: 0 }
       }}
+      initial="hidden"
+      animate="show"
+      style={{ width: '100%' }}
     >
-      <Container className={classes.containerHeader}>
-        <AddCircleIcon
-          fontSize="large"
-          style={{ color: '#228A95', marginRight: '1.5rem' }}
-        />
-        <Image
-          src="/img/register.svg"
-          alt="register icon"
-          width={57}
-          height={57}
-        />
-        <Typography className={classes.text} component="h3">
-          Simulação de Taxas
-        </Typography>
+      <Container
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}
+        className="animateHeader"
+      >
+        <Container className={classes.containerHeader}>
+          <AddCircleIcon
+            fontSize="large"
+            style={{ color: '#228A95', marginRight: '1.5rem' }}
+          />
+          <Image
+            src="/img/register.svg"
+            alt="register icon"
+            width={57}
+            height={57}
+          />
+          <Typography className={classes.text} component="h3">
+            Simulação de Taxas
+          </Typography>
+        </Container>
+        {tabled && (
+          <motion.div
+            className="animateInputHeader"
+            transition={{ duration: 0.5, delay: 0.5 }}
+            variants={{
+              show: { opacity: 1 },
+              hidden: { opacity: 0 }
+            }}
+            initial="hidden"
+            animate="show"
+            style={{ width: '100%' }}
+          >
+            <Box className={(classes.boxInput, 'animateInputHeader')}>
+              <Typography className={classes.texts}>Tabela:</Typography>
+              <Select className={classes.root} value={tableSelected.name}>
+                <MenuItem value={tableSelected.name}>
+                  {tableSelected.name}
+                </MenuItem>
+                {tables && (
+                  <MenuItem
+                    value={
+                      tables.tableNameOne === tableSelected.name
+                        ? tables.tableNameTwo
+                        : tables.tableNameOne
+                    }
+                  >
+                    {tables.tableNameOne === tableSelected.name
+                      ? tables.tableNameTwo
+                      : tables.tableNameOne}
+                  </MenuItem>
+                )}
+              </Select>
+            </Box>
+          </motion.div>
+        )}
       </Container>
-      {tabled && (
-        <Box className={classes.boxInput}>
-          <Typography className={classes.texts}>Tabela:</Typography>
-          <Select className={classes.root} value={tableSelected.name}>
-            <MenuItem value={tableSelected.name}>{tableSelected.name}</MenuItem>
-            {tables && (
-              <MenuItem
-                value={
-                  tables.tableNameOne === tableSelected.name
-                    ? tables.tableNameTwo
-                    : tables.tableNameOne
-                }
-              >
-                {tables.tableNameOne === tableSelected.name
-                  ? tables.tableNameTwo
-                  : tables.tableNameOne}
-              </MenuItem>
-            )}
-          </Select>
-        </Box>
-      )}
-    </Container>
+    </motion.div>
   )
 }
 

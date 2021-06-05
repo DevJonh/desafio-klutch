@@ -8,6 +8,7 @@ import { formatCurrency } from 'utils/format'
 import Tables from 'components/Tables'
 import ContentHeader from 'components/ContentHeader'
 import Alert from 'components/Alert'
+import { motion } from 'framer-motion'
 
 import axios from 'config/axios'
 import { IRateTable } from 'types'
@@ -50,7 +51,7 @@ const useStyles = makeStyles(() =>
     form: {
       display: 'flex',
       alignItems: 'center',
-      height: '8rem',
+      height: '4rem',
       '& div': {
         margin: 0
       }
@@ -128,37 +129,48 @@ const Home = ({ tables }: IHomeProps) => {
       <Content maxWidth="md">
         <>
           <ContentHeader />
-          <Container className={classes.root}>
-            <Typography className={classes.desiredValue} component="h3">
-              Valor Desejado
-            </Typography>
-            <form
-              noValidate
-              className={classes.form}
-              onSubmit={(e) => calculateLoan(e)}
-            >
-              <TextField
-                type="text"
-                value={valueDesired}
-                placeholder="R$ 0,00"
-                label={false}
-                error={isError}
-                onChange={(e) => setValueDesired(e.target.value)}
-                size="small"
-                margin="normal"
-                className={classes.input}
-              />
-              <Button
-                className={classes.buttonSubmit}
-                variant="contained"
-                disableElevation
-                size="medium"
-                type="submit"
+          <motion.div
+            className="animateContainer"
+            transition={{ duration: 0.5, delay: 0.8 }}
+            variants={{
+              show: { opacity: 1 },
+              hidden: { opacity: 0 }
+            }}
+            initial="hidden"
+            animate="show"
+          >
+            <Container className={classes.root}>
+              <Typography className={classes.desiredValue} component="h3">
+                Valor Desejado
+              </Typography>
+              <form
+                noValidate
+                className={classes.form}
+                onSubmit={(e) => calculateLoan(e)}
               >
-                Calcular
-              </Button>
-            </form>
-          </Container>
+                <TextField
+                  type="text"
+                  value={valueDesired}
+                  placeholder="R$ 0,00"
+                  label={false}
+                  error={isError}
+                  onChange={(e) => setValueDesired(e.target.value)}
+                  size="small"
+                  margin="normal"
+                  className={classes.input}
+                />
+                <Button
+                  className={classes.buttonSubmit}
+                  variant="contained"
+                  disableElevation
+                  size="medium"
+                  type="submit"
+                >
+                  Calcular
+                </Button>
+              </form>
+            </Container>
+          </motion.div>
           {openedTable && tables.length !== 0 && tables[1].id && (
             <Tables tables={tables} desiredValue={value} />
           )}
